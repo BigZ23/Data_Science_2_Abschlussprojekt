@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyzer</title>
+    <link href="css/globals.css" rel="stylesheet" />
+    <link href="css/buttons.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/Application/Frontend/js/prediction.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=&libraries=places&callback=init"> </script>
+</head>
+<body>
+    
+            <div class="container">
+                <!-- top-bar for homebutton/logo and link to github page -->
+                <div class="title">
+                    <h1> <a href="index.html"> <span class="material-symbols-outlined"> donut_small </span> Geola </a> </h1>
+                </div>
+                <div class="github">
+                    <a href="https://github.com/PhilippWiessner/DataScience2" target="_blank" rel="noopener noreferrer"
+                        class="fa fa-github"> </a>
+                </div>
+            </div>
+            <div id="navandpred">
+                <div id="pac-container">
+                    <input id="pac-input" type="text" placeholder="Enter a location" />
+                    <button class="btn" onclick=getResult(getCenter(),getZoom())> Predict </button> 
+                  </div>
+            </div>
+            <div id="googleMap"></div>
+            <script>
+                var map;
+                var input = document.getElementById('pac-input');
+                function init() {
+                    var mapProp = {center:new google.maps.LatLng(-34.397, 150.644), zoom:18,  mapTypeId: 'satellite', disableDefaultUI: true,
+                    maxZoom: 18, minZoom: 18, scrollwheel: false, navigationControl: false,mapTypeControl: false, scaleControl: false, draggable: false};
+                    map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+                    autocomplete = new google.maps.places.Autocomplete(input, options);
+                }
+                function getCenter(){
+                    return map.getCenter();
+                }
+                function getZoom(){
+                    return map.getZoom();
+                }
+            </script>
+            <!-- onclick lock map, wait for result (maybe loading animation), display result as overlay, another button to unlock map, be able to start another prediction -->
+</body>
+</html>

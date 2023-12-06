@@ -1,0 +1,122 @@
+html {
+    font-size: 100%;
+    box-sizing: border-box;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+    overflow: overlay;
+    scrollbar-width: thin;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Schibsted Grotesk', sans-serif;
+    margin: 0%;
+    width: 100%;
+    height: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    z-index: 3;
+}
+
+.container {
+    width: 100%;
+    float: left;
+    position:absolute;
+    z-index: 2;
+}
+
+.title {
+    float: left;
+    text-align: left;
+    width: 50%;
+    padding-left: 1.5%;
+}
+
+.github {
+    float: left;
+    text-align: right;
+    width: 50%;
+    padding-top: 25px;
+    padding-right: 1.5%;
+    padding-left: 1%;
+    height: fit-content;
+    white-space: normal;
+    overflow: hidden;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-size: 30px;
+}
+
+#googleMap {
+    min-width:100vh;
+    min-height:100vh;
+    margin:0;
+    padding:0;
+    position: relative;
+}
+
+#prediction{
+    text-align: center;
+    padding-top: 20px;
+}
+
+#pac-container{
+    text-align: center;
+    padding-top: 20%;
+}
+
+#pac-input{
+    border-radius: 5px;
+    border: none;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: 0;
+    font-size: 14px;
+    color: #000000;
+    background-color: #ffffffa8;
+}
+
+#navandpred{
+    text-align: center;
+    position: absolute;
+    width:100%;
+    height:100%;
+    z-index: 2;
+}
+
+p {
+    text-align: center;
+}
+
+h2 {
+    width: 100%;
+    text-align: center;
+}
+
+.titletext {
+    text-align: center;
+    display: block;
+}
+
+input {
+    padding:6px;
+    border:3px solid #999;
+    background:none;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    color:#666;
+    font-size:16px;
+    width:260px;
+}
+
+input:focus {
+    border-color:#00aeff;
+    outline:0;
+    background:#f9f9f9;
+}
