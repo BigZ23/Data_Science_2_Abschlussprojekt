@@ -34,24 +34,48 @@
             <div id="navandpred">
                 <div id="pac-container">
                     <input id="pac-input" type="text" placeholder="Enter a location" />
-                    <button class="btn" onclick=getResult(getCenter(),getZoom())> Predict </button> 
+                    <button class="btn" onclick=getResult(getCenter(),getZoom(),getSouthWest(),getNorthEast())> Predict </button> 
                   </div>
             </div>
             <div id="googleMap"></div>
             <script>
                 var map;
                 var input = document.getElementById('pac-input');
+                var autocomplete;
                 function init() {
-                    var mapProp = {center:new google.maps.LatLng(-34.397, 150.644), zoom:18,  mapTypeId: 'satellite', disableDefaultUI: true,
+                    var mapProp = {center:new google.maps.LatLng(49.567, 10.899), zoom:18, mapTypeId: 'satellite', disableDefaultUI: true,
                     maxZoom: 18, minZoom: 18, scrollwheel: false, navigationControl: false,mapTypeControl: false, scaleControl: false, draggable: false};
                     map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-                    autocomplete = new google.maps.places.Autocomplete(input, options);
+                    autocomplete = new google.maps.places.Autocomplete(input);
+
+                    autocomplete.addListener("place_changed", () => {
+                    const place = autocomplete.getPlace();
+
+                    if (!place.geometry || !place.geometry.location) {
+                    window.alert("No details available for input: '" + place.name + "'");
+                    return;
+                    }
+
+                    if (place.geometry.viewport) {
+                    map.fitBounds(place.geometry.viewport);
+                    } else {
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(18);
+                    }
+                });
+
                 }
                 function getCenter(){
                     return map.getCenter();
                 }
                 function getZoom(){
                     return map.getZoom();
+                }
+                function getSouthWest(){
+                    return map.getBounds().getSouthWest();
+                }
+                function getNorthEast(){
+                    return map.getBounds().getNorthEast();
                 }
             </script>
             <!-- onclick lock map, wait for result (maybe loading animation), display result as overlay, another button to unlock map, be able to start another prediction -->

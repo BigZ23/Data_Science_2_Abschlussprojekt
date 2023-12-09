@@ -13,11 +13,11 @@ def main():
 
 #simple api prediction endpoint
 @app.get('/predict/')
-def prediction (coordinates: str, zoom: int):
+def prediction (coordinates, zoom: int):
     #google staticmap api parameter
     url = 'https://maps.googleapis.com/maps/api/staticmap?'
     api_key = 'test'
-    size = '400x400'
+    size = '500x500'
     maptype = 'satellite'
     #convert coordinates to image of area
     image = requests.get(url + 'center=' + coordinates + '&zoom=' + zoom + '&size=' + size + '&maptype=' + maptype + '&key=' + api_key)
