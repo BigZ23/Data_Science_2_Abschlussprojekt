@@ -17,58 +17,69 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="/Application/Frontend/js/prediction.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnTP0O9HhzodzG1DTFhk0T9tOfcYxFfvc&libraries=places&callback=init"> </script>
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnTP0O9HhzodzG1DTFhk0T9tOfcYxFfvc&libraries=places&callback=init"> </script>
 </head>
+
 <body>
+
+    <div class="container">
+        <!-- top-bar for homebutton/logo and link to github page -->
+        <div class="title">
+            <h1> <a href="index.html"> <span class="material-symbols-outlined"> donut_small </span> Geola </a> </h1>
+        </div>
+        <div class="github">
+            <a href="https://github.com/PhilippWiessner/DataScience2" target="_blank" rel="noopener noreferrer"
+                class="fa fa-github"> </a>
+        </div>
+    </div>
+    <div id="navandpred">
+        <div id="pac-container">
+            <input id="pac-input" type="text" placeholder="Enter a location" />
+            <button class="btn" onclick=getResult(getCenter())> Predict </button>
+        </div>
+    </div>
+    <div id="googleMap"></div>
+    <script>
+        var map;
+        var input = document.getElementById('pac-input');
+        var autocomplete;
+        var lat;
+        var lng; 
     
-            <div class="container">
-                <!-- top-bar for homebutton/logo and link to github page -->
-                <div class="title">
-                    <h1> <a href="index.html"> <span class="material-symbols-outlined"> donut_small </span> Geola </a> </h1>
-                </div>
-                <div class="github">
-                    <a href="https://github.com/PhilippWiessner/DataScience2" target="_blank" rel="noopener noreferrer"
-                        class="fa fa-github"> </a>
-                </div>
-            </div>
-            <div id="navandpred">
-                <div id="pac-container">
-                    <input id="pac-input" type="text" placeholder="Enter a location" />
-                    <button class="btn" onclick=getResult(getCenter())> Predict </button> 
-                  </div>
-            </div>
-            <div id="googleMap"></div>
-            <script>
-                var map;
-                var input = document.getElementById('pac-input');
-                var autocomplete;
-                function init() {
-                    var mapProp = {center:new google.maps.LatLng(49.788143251247014, 9.935410200836861), zoom:16, mapTypeId: 'satellite', disableDefaultUI: true,
-                    maxZoom: 16, minZoom: 16, scrollwheel: false, navigationControl: false,mapTypeControl: false, scaleControl: false, draggable: false};
-                    map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-                    autocomplete = new google.maps.places.Autocomplete(input);
+        if(localStorage.getItem("lat") == null){ localStorage.setItem("lat", 49.788143251247014)}
+        if(localStorage.getItem("lng") == null){ localStorage.setItem("lng", 9.935410200836861)} 
+      
+        function init() {
+            var mapProp = {
+                center: new google.maps.LatLng(localStorage.getItem("lat"), localStorage.getItem("lng")), zoom: 16, mapTypeId: 'satellite', disableDefaultUI: true,
+                maxZoom: 16, minZoom: 16, scrollwheel: false, navigationControl: false, mapTypeControl: false, scaleControl: false, draggable: false
+            };
+            map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            autocomplete = new google.maps.places.Autocomplete(input);
 
-                    autocomplete.addListener("place_changed", () => {
-                    const place = autocomplete.getPlace();
+            autocomplete.addListener("place_changed", () => {
+                const place = autocomplete.getPlace();
 
-                    if (!place.geometry || !place.geometry.location) {
+                if (!place.geometry || !place.geometry.location) {
                     window.alert("No details available for input: '" + place.name + "'");
                     return;
-                    }
+                }
 
-                    if (place.geometry.viewport) {
+                if (place.geometry.viewport) {
                     map.fitBounds(place.geometry.viewport);
-                    } else {
+                } else {
                     map.setCenter(place.geometry.location);
                     map.setZoom(16);
-                    }
-                });
+                }
+            });
 
-                }
-                function getCenter(){
-                    return map.getCenter();
-                }
-            </script>
-           
+        }
+        function getCenter() {
+            return map.getCenter();
+        }
+    </script>
+
 </body>
+
 </html>

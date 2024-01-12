@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
 from fastai.vision.all import *
 import requests
@@ -15,6 +16,21 @@ import __main__
 
 #Creation of the FastApi Application
 app = FastAPI()
+
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # function to get the mask given an image
 def get_mask(x):
@@ -269,6 +285,8 @@ def prediction (lat, lng):
         rgb_converted = rgb_converted.convert("RGB")
         # save it again
         rgb_converted.save(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_OSM_Data" + ".png")
+    
+    
         
     #function to plot predicted data
     def plot_prediction(coordinates, prediction):
@@ -297,20 +315,66 @@ def prediction (lat, lng):
         rgb_converted = rgb_converted.convert("RGB")
         # save it again
         rgb_converted.save(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Prediction" + ".png")
+    
+    # Function to plot the openstreetmap street data and save it as a .png
+    def plot_streets(coordinates, zoom=16):
+        # get the bounding box form the given coordinates and zoom level
+        south, east, north, west = getImageBounds(
+            float(coordinates[0]), float(coordinates[1]), zoom
+        )
+
+        # query openstreetmap for all streets in the boundingbox
+        streets = ox.features_from_bbox(north, south, east, west, tags={"highway": True})
+
+        # create a plot
+        fig, ax = plt.subplots(figsize=(8, 8), dpi=104)
+
+        streets.plot(
+                ax=ax,
+                color = "#000000",
+                antialiased=False,
+                edgecolor="none",
+                )
+        
+        plt.xlim(east, west)
+        plt.ylim(south, north)
+        # turn of the axis, as to not save it in the image file
+        plt.axis("off")
+        # save the image file under the specified path
+        fig.savefig(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Street_Data" + ".png", bbox_inches="tight", pad_inches=0,)
+        # close the plot to reduce memory usage
+        plt.close()
+        # open the image again
+        rgb_converted = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Street_Data" + ".png")
+        # convert it from rgba to rgb as we are not using the alpha values
+        rgb_converted = rgb_converted.convert("RGB")
+        # save it again
+        rgb_converted.save(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Street_Data" + ".png")
         
     #function to combine osm and predicted data
     def plot_combined(coordinates, prediction):
+        #open all images
         osm_data = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_OSM_Data" + ".png")
         prediction_data = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Prediction" + ".png")
+        street_data = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Street_Data" + ".png")
+        #convert them to numpy arrays for faster processing
         osm_data = np.array(osm_data)
         prediction_data = np.array(prediction_data)
+        street_data = np.array(street_data)
+        #create empty "image"
         combined_array = np.zeros((len(osm_data), len(osm_data), 3))
         for line in range(len(osm_data)):
             for column in range(len(osm_data)):
-                if np.array_equal(osm_data[line][column], [255, 255, 255]):
-                    combined_array[line][column] = prediction_data[line][column]
-                else:
-                    combined_array[line][column] = osm_data[line][column]
+                #insert blank if street is present
+                if np.array_equal(street_data[line][column], [0, 0, 0]):
+                    combined_array[line][column] = [255, 255, 255]
+                else: 
+                    #only use prediction data if osm_data didn't assign a value
+                    if np.array_equal(osm_data[line][column], [255, 255, 255]):
+                        combined_array[line][column] = prediction_data[line][column]
+                    else:
+                        combined_array[line][column] = osm_data[line][column]
+                        
         combined_array = combined_array.astype(int)
         plt.subplots(figsize=(8, 8), dpi=104)
         plt.plot(antialiased=False)
@@ -360,38 +424,36 @@ def prediction (lat, lng):
         plt.imshow(Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + ".png"), alpha=1)
         plt.imshow(white_to_transparency(Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Combined" + ".png")), alpha=0.8)
         plt.axis("off")
-        plt.savefig(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Combined" + ".png", bbox_inches="tight", pad_inches=0,)
+        plt.savefig(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Combined_BG" + ".png", bbox_inches="tight", pad_inches=0,)
         plt.close()
-        
-        #add background to osm mask
-        plt.subplots(figsize=(8, 8), dpi=104)
-        plt.plot(antialiased=True)
-        plt.imshow(Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + ".png"), alpha=1)
-        plt.imshow(white_to_transparency(Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_OSM_Data" + ".png")), alpha=0.8)
-        plt.axis("off")
-        plt.savefig(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_OSM_Data" + ".png", bbox_inches="tight", pad_inches=0,)
-        plt.close()
-        
-        #add background to predicted mask
-        plt.subplots(figsize=(8, 8), dpi=104)
-        plt.plot(antialiased=True)
-        plt.imshow(Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + ".png"), alpha=1)
-        plt.imshow(white_to_transparency(Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Prediction" + ".png")), alpha=0.8)
-        plt.axis("off")
-        plt.savefig(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Prediction" + ".png", bbox_inches="tight", pad_inches=0,)
-        plt.close()
-        
+    
+    #download the image for the given coordinates 
     download_images(coordinates, 16)
+    #plot the osm data of the given coordinates
     plot_data(coordinates, 16)
-        
+    
+    #load the model    
     learn = load_learner(os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd()))) + os.sep + "Model" + os.sep + "model.pkl", cpu=True,)
+    #generate the prediction
     prediction = learn.predict(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + ".png")
+    
+    #extract the data out of the returned data
     data = prediction[0]
     data = np.array(data)
         
+    #plot the prediciton     
     plot_prediction(coordinates, data)
+    #plot the street data
+    plot_streets(coordinates)
+    #combine the osm and predicted data
     plot_combined(coordinates, data)
+    #add a background to the combined image
     add_background(coordinates)
+    
+    #cache cleanup
+    datanames = os.listdir(os.getcwd() + os.sep + "cache")
+    for dataname in datanames:
+        os.remove(os.getcwd() + os.sep + "cache" + os.sep + dataname)
     
 @app.on_event('startup')
 async def startup_event():
