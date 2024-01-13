@@ -63,6 +63,12 @@ def main():
 @app.post('/predict/')
 def prediction (lat, lng):
     coordinates = (lat, lng)
+
+    #linux support
+    import pathlib
+    user_platform = platform.system()
+    if user_platform == 'Windows': pathlib.PosixPath = pathlib.WindowsPath
+    else: pathlib.WindowsPath = pathlib.PosixPath
         
     # Cleanup previous request
     datanames = os.listdir(os.getcwd() + os.sep + "temp")
