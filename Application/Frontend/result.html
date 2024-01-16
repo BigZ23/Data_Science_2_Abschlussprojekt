@@ -15,7 +15,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="/Application/Frontend/js/prediction.js"></script>
+    <script src="js/prediction.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script async
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnTP0O9HhzodzG1DTFhk0T9tOfcYxFfvc&libraries=places&callback=init"> </script>
@@ -50,21 +50,23 @@
                 return map.getCenter();
             }
         </script>
-    
+
         <div id="prediction">
+            <div id="legend"></div>
         </div>
-    
         <script>
             var wrapper = document.getElementById("prediction");
             var element = document.createElement("div");
             element.className = "result";
-            element.innerHTML = "<img id='prediction_image' src='/Application/Backend/app/temp/" + localStorage.getItem("lat") + "_" + localStorage.getItem("lng") + "_Combined_BG.png'/>";
-            wrapper.appendChild(element);
-        </script>    
-        <div id = "back-button">
+            element.innerHTML = "<img id='prediction_image' src='../Backend/app/temp/" + localStorage.getItem("lat") + "_" + localStorage.getItem("lng") + "_Combined_BG.png'/>";
+            wrapper.insertBefore(element, wrapper.children[0]);
+        </script>
+        <div id="back-button">
             <button class="btn" onclick="window.location='index.html'"> Start another analysis</button>
         </div>
-            
+        <script>
+            getUnique(localStorage.getItem("lat"), localStorage.getItem("lng"));
+        </script>
     </div>
 </body>
 

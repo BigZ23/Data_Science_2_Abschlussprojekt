@@ -15,7 +15,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="/Application/Frontend/js/prediction.js"></script>
+    <script src="js/prediction.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script async
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnTP0O9HhzodzG1DTFhk0T9tOfcYxFfvc&libraries=places&callback=init"> </script>
@@ -36,20 +36,25 @@
     <div id="navandpred">
         <div id="pac-container">
             <input id="pac-input" type="text" placeholder="Enter a location" />
-            <button class="btn" onclick=getResult(getCenter())> Predict </button>
+            <button class="btn" id="predict_button" onclick="getResult(getCenter()); disableInputs(); showLoading();">
+                Predict </button>
         </div>
     </div>
     <div id="googleMap"></div>
+    <div id="loading-overlay">
+        <img id="loading" src="svg/Earth-2.6s-200px.svg"> </img>
+        <div id="loading_text"> Analysing landuse </div>
+    </div>
     <script>
         var map;
         var input = document.getElementById('pac-input');
         var autocomplete;
         var lat;
-        var lng; 
-    
-        if(localStorage.getItem("lat") == null){ localStorage.setItem("lat", 49.788143251247014)}
-        if(localStorage.getItem("lng") == null){ localStorage.setItem("lng", 9.935410200836861)} 
-      
+        var lng;
+
+        if (localStorage.getItem("lat") == null) { localStorage.setItem("lat", 49.788143251247014) }
+        if (localStorage.getItem("lng") == null) { localStorage.setItem("lng", 9.935410200836861) }
+
         function init() {
             var mapProp = {
                 center: new google.maps.LatLng(localStorage.getItem("lat"), localStorage.getItem("lng")), zoom: 16, mapTypeId: 'satellite', disableDefaultUI: true,
@@ -77,6 +82,14 @@
         }
         function getCenter() {
             return map.getCenter();
+        }
+        function disableInputs() {
+            setTimeout(function () { document.getElementById('predict_button').classList.remove("btn"); document.getElementById('predict_button').classList.add("disabled"); document.getElementById('pac-input').disabled = true; document.getElementById('pac-input').style.backgroundColor = '#ffffff63'; }, 500);
+        }
+
+        function showLoading() {
+            // Display the loading overlay
+            document.getElementById('loading-overlay').style.display = 'flex';
         }
     </script>
 

@@ -11,6 +11,7 @@ from PIL import Image
 import osmnx as ox
 import shutil
 import numpy as np
+import warnings
 import __main__
 
 
@@ -22,6 +23,7 @@ origins = [
     "http://localhost:8080",
     "http://127.0.0.1:5500",
     "http://localhost:5500",
+    "http://127.0.0.1:8080"
 ]
 
 app.add_middleware(
@@ -62,6 +64,7 @@ def main():
 #simple api prediction endpoint
 @app.post('/predict/')
 def prediction (lat, lng):
+    
     coordinates = (lat, lng)
 
     #linux support
@@ -255,6 +258,7 @@ def prediction (lat, lng):
 
     # Function to plot the openstreetmap data and save it as a .png
     def plot_data(coordinates, zoom=16):
+        warnings.filterwarnings("ignore", message="Starting a Matplotlib GUI outside of the main thread will likely fail.", category=UserWarning)
         # get the bounding box form the given coordinates and zoom level
         south, east, north, west = getImageBounds(
             float(coordinates[0]), float(coordinates[1]), zoom
@@ -296,6 +300,7 @@ def prediction (lat, lng):
         
     #function to plot predicted data
     def plot_prediction(coordinates, prediction):
+        warnings.filterwarnings("ignore", message="Starting a Matplotlib GUI outside of the main thread will likely fail.", category=UserWarning)
         scale = 3
         data_rgb = np.zeros((len(prediction) * scale, len(prediction) * scale, 3))
         for line in range(len(prediction)):
@@ -324,6 +329,7 @@ def prediction (lat, lng):
     
     # Function to plot the openstreetmap street data and save it as a .png
     def plot_streets(coordinates, zoom=16):
+        warnings.filterwarnings("ignore", message="Starting a Matplotlib GUI outside of the main thread will likely fail.", category=UserWarning)
         # get the bounding box form the given coordinates and zoom level
         south, east, north, west = getImageBounds(
             float(coordinates[0]), float(coordinates[1]), zoom
@@ -359,6 +365,7 @@ def prediction (lat, lng):
         
     #function to combine osm and predicted data
     def plot_combined(coordinates, prediction):
+        warnings.filterwarnings("ignore", message="Starting a Matplotlib GUI outside of the main thread will likely fail.", category=UserWarning)
         #open all images
         osm_data = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_OSM_Data" + ".png")
         prediction_data = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Prediction" + ".png")
@@ -424,6 +431,7 @@ def prediction (lat, lng):
         return Image.fromarray(x)
 
     def add_background(coordinates):
+        warnings.filterwarnings("ignore", message="Starting a Matplotlib GUI outside of the main thread will likely fail.", category=UserWarning)
         #add background to combined mask
         plt.subplots(figsize=(8, 8), dpi=104)
         plt.plot(antialiased=True)
@@ -460,7 +468,32 @@ def prediction (lat, lng):
     datanames = os.listdir(os.getcwd() + os.sep + "cache")
     for dataname in datanames:
         os.remove(os.getcwd() + os.sep + "cache" + os.sep + dataname)
+
+@app.get('/unique/')
+def get_unique(lat, lng):
+    coordinates = (lat, lng)
+    valid_rgb = ['255255255', '477979', '8510747', '1608245', '01000', 
+                '13900', '1281280', '7261139', '119136153', '188143143', 
+                '0139139', '00139', '5020550', '21816532', '143184143', 
+                '13900139', '1764896', '25500', '2551400', '2552550', 
+                '000205', '64224208', '002550', '2202060', '0191255', 
+                '16032240', '240128128', '17325547', '218112214', 
+                '25512780', '2550255', '240230140', '100149237', 
+                '221160221', '176224230', '144238144', '25520147', 
+                '123104238', '255218185']
     
+    image = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Combined" + ".png")
+    image_data = np.array(image)
+    image_data_reshape = image_data.reshape((-1, 3))
+    unique = np.unique(image_data_reshape, axis=0)
+    valid_unique = []
+    for element in unique:
+        value = ''.join(str(x) for x in element)
+        if value in valid_rgb:
+            valid_unique.append(valid_rgb.index(value))
+    valid_unique.sort()
+    return valid_unique
+
 @app.on_event('startup')
 async def startup_event():
     print('Anwendung gestartet')

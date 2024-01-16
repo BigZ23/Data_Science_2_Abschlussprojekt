@@ -4,7 +4,6 @@ geopandas==0.13.2
 matplotlib==3.7.0
 numpy==1.23.5
 osmnx==1.8.1
-Pillow==9.4.0
 Pillow==10.2.0
 Requests==2.31.0
 starlette==0.35.1
