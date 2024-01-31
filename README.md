@@ -7,7 +7,7 @@ To launch the program on a Windows operating system, simply run the `start_progr
 ## Manual Setup (Windows/Linux):
 
 ### 1. Download Modelfile:
-Download model file from https://drive.google.com/file/d/1KzhK78cQcRkj5Fay-PBw5Uw6Kw9KGhvO/view?usp=sharing and place it in `/Model/'
+Download model file from https://drive.google.com/file/d/1KzhK78cQcRkj5Fay-PBw5Uw6Kw9KGhvO/view?usp=sharing and place it in `/Model/`
 
 ### 2. Install Requirements:
 
