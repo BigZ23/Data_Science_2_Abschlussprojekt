@@ -6,7 +6,10 @@ To launch the program on a Windows operating system, simply run the `start_progr
 
 ## Manual Setup (Windows/Linux):
 
-### 1. Install Requirements:
+### 1. Download Modelfile:
+Download model file from https://drive.google.com/file/d/1KzhK78cQcRkj5Fay-PBw5Uw6Kw9KGhvO/view?usp=sharing and place it in `/Model/'
+
+### 2. Install Requirements:
 
 Navigate to `/Application/Backend/` and open the console. Run the following command:
 
@@ -14,17 +17,17 @@ Navigate to `/Application/Backend/` and open the console. Run the following comm
 pip install -r Application/Backend/requirements.txt
 ```
 
-### 2. Start the Backend Server:
+### 3. Start the Backend Server:
 Navigate to `/Application/Backend/app/` and open the console. Run:
 ```bash
 uvicorn main:app
 ```
 
-### 3. Start the HTML Server:
+### 4. Start the HTML Server:
 Navigate to `/Application/` and open the console. Run:
 ```bash
 python3 -m http.server -b 127.0.0.1 8080
 ```
 
-### 4. Open the Locally Hosted Website:
+### 5. Open the Locally Hosted Website:
 Open your preferred browser and go to http://127.0.0.1:8080/.
