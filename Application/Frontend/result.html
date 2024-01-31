@@ -34,11 +34,15 @@
         </div>
     </div>
     <div id="mapandprediction">
+        <!-- div for the google map in background, applied strong blur to make the predicted image more visually distinctive-->
         <div id="resultGoogleMap"></div>
         <script>
+            // script defining the google associated elements
             var map;
             var input = document.getElementById('pac-input');
             var autocomplete;
+
+            // define the google map settings 
             function init() {
                 var mapProp = {
                     center: new google.maps.LatLng(localStorage.getItem("lat"), localStorage.getItem("lng")), zoom: 16, mapTypeId: 'satellite', disableDefaultUI: true,
@@ -46,25 +50,33 @@
                 };
                 map = new google.maps.Map(document.getElementById("resultGoogleMap"), mapProp);
             }
+
+            // simple function to get the center coordinates of the current selection
             function getCenter() {
                 return map.getCenter();
             }
         </script>
 
+        <!-- div containing the prediction image and the legend -->
         <div id="prediction">
+            <!-- div containing the legend elements that are dynamically generate of only lables present in the image -->
             <div id="legend"></div>
         </div>
         <script>
+            // get the wrapper the following elements should be inserted into
             var wrapper = document.getElementById("prediction");
+            // insertion of the correct predicted image
             var element = document.createElement("div");
             element.className = "result";
             element.innerHTML = "<img id='prediction_image' src='../Backend/app/temp/" + localStorage.getItem("lat") + "_" + localStorage.getItem("lng") + "_Combined_BG.png'/>";
             wrapper.insertBefore(element, wrapper.children[0]);
         </script>
+        <!-- button to go back to the index page -->
         <div id="back-button">
             <button class="btn" onclick="window.location='index.html'"> Start another analysis</button>
         </div>
         <script>
+            // start get unique to generate the appropriate legend on the side of the image
             getUnique(localStorage.getItem("lat"), localStorage.getItem("lng"));
         </script>
     </div>

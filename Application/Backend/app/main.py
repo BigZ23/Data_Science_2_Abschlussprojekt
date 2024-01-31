@@ -53,7 +53,8 @@ def dice_wo_bg(input, target):
     input = (input.argmax(dim=1) != 0).float()
     target = (target.squeeze(1) != 0).float()
     return (2.0 * (input * target).sum().float() + 1e-8) / (input.sum().float() + target.sum().float() + 1e-8)
-    
+
+# define the functions in the namespace
 __main__.get_mask = get_mask
 __main__.dice_wo_bg = dice_wo_bg
 
@@ -265,22 +266,26 @@ def prediction (lat, lng):
         )
 
         # query openstreetmap for all landuse in the boundingbox
-        landuse = ox.features_from_bbox(north, south, east, west, tags={"landuse": True})
+        try:
+            landuse = ox.features_from_bbox(north, south, east, west, tags={"landuse": True})
 
-        # create a plot
-        fig, ax = plt.subplots(figsize=(8, 8), dpi=104)
+            # create a plot
+            fig, ax = plt.subplots(figsize=(8, 8), dpi=104)
 
-        # for each landuse in the queried data, color the respective area in the earlier specified color
-        for type in landuse["landuse"].unique():
-            # filter so wrongly labeled data doesn't cause any issues (instances of this can be seen on the openstreetmap key wiki)
-            if type in dictionary_landuse:
-                # filter for the currently selected landuse and plot it.
-                landuse.loc[landuse["landuse"] == type].plot(
-                    ax=ax,
-                    color=landuse_mapped_hex[type],
-                    antialiased=False,
-                    edgecolor="none",
-                )
+            # for each landuse in the queried data, color the respective area in the earlier specified color
+            for type in landuse["landuse"].unique():
+                # filter so wrongly labeled data doesn't cause any issues (instances of this can be seen on the openstreetmap key wiki)
+                if type in dictionary_landuse:
+                    # filter for the currently selected landuse and plot it.
+                    landuse.loc[landuse["landuse"] == type].plot(
+                        ax=ax,
+                        color=landuse_mapped_hex[type],
+                        antialiased=False,
+                        edgecolor="none",
+                    )
+        except:
+            # create an empty plot if no osm data available
+            fig, ax = plt.subplots(figsize=(8, 8), dpi=104)
         plt.xlim(east, west)
         plt.ylim(south, north)
         # turn of the axis, as to not save it in the image file
@@ -335,18 +340,22 @@ def prediction (lat, lng):
             float(coordinates[0]), float(coordinates[1]), zoom
         )
 
-        # query openstreetmap for all streets in the boundingbox
-        streets = ox.features_from_bbox(north, south, east, west, tags={"highway": True})
+        try:
+            # query openstreetmap for all streets in the boundingbox
+            streets = ox.features_from_bbox(north, south, east, west, tags={"highway": True})
 
-        # create a plot
-        fig, ax = plt.subplots(figsize=(8, 8), dpi=104)
+            # create a plot
+            fig, ax = plt.subplots(figsize=(8, 8), dpi=104)
 
-        streets.plot(
-                ax=ax,
-                color = "#000000",
-                antialiased=False,
-                edgecolor="none",
-                )
+            streets.plot(
+                    ax=ax,
+                    color = "#000000",
+                    antialiased=False,
+                    edgecolor="none",
+                    )
+        except:
+            # create an empty plot if no osm data available
+            fig, ax = plt.subplots(figsize=(8, 8), dpi=104)
         
         plt.xlim(east, west)
         plt.ylim(south, north)
@@ -363,26 +372,26 @@ def prediction (lat, lng):
         # save it again
         rgb_converted.save(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Street_Data" + ".png")
         
-    #function to combine osm and predicted data
+    # function to combine osm and predicted data
     def plot_combined(coordinates, prediction):
         warnings.filterwarnings("ignore", message="Starting a Matplotlib GUI outside of the main thread will likely fail.", category=UserWarning)
-        #open all images
+        # open all images
         osm_data = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_OSM_Data" + ".png")
         prediction_data = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Prediction" + ".png")
         street_data = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Street_Data" + ".png")
-        #convert them to numpy arrays for faster processing
+        # convert them to numpy arrays for faster processing
         osm_data = np.array(osm_data)
         prediction_data = np.array(prediction_data)
         street_data = np.array(street_data)
-        #create empty "image"
+        # create empty "image"
         combined_array = np.zeros((len(osm_data), len(osm_data), 3))
         for line in range(len(osm_data)):
             for column in range(len(osm_data)):
-                #insert blank if street is present
+                # insert blank if street is present
                 if np.array_equal(street_data[line][column], [0, 0, 0]):
                     combined_array[line][column] = [255, 255, 255]
                 else: 
-                    #only use prediction data if osm_data didn't assign a value
+                    # only use prediction data if osm_data didn't assign a value
                     if np.array_equal(osm_data[line][column], [255, 255, 255]):
                         combined_array[line][column] = prediction_data[line][column]
                     else:
@@ -432,7 +441,7 @@ def prediction (lat, lng):
 
     def add_background(coordinates):
         warnings.filterwarnings("ignore", message="Starting a Matplotlib GUI outside of the main thread will likely fail.", category=UserWarning)
-        #add background to combined mask
+        # add satellite background to combined mask
         plt.subplots(figsize=(8, 8), dpi=104)
         plt.plot(antialiased=True)
         plt.imshow(Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + ".png"), alpha=1)
@@ -441,37 +450,39 @@ def prediction (lat, lng):
         plt.savefig(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Combined_BG" + ".png", bbox_inches="tight", pad_inches=0,)
         plt.close()
     
-    #download the image for the given coordinates 
+    # download the image for the given coordinates 
     download_images(coordinates, 16)
-    #plot the osm data of the given coordinates
+    # plot the osm data of the given coordinates
     plot_data(coordinates, 16)
     
-    #load the model    
+    # load the model    
     learn = load_learner(os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd()))) + os.sep + "Model" + os.sep + "model.pkl", cpu=True,)
-    #generate the prediction
+    # generate the prediction
     prediction = learn.predict(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + ".png")
     
-    #extract the data out of the returned data
+    # extract the data out of the returned data
     data = prediction[0]
     data = np.array(data)
         
-    #plot the prediciton     
+    # plot the prediciton     
     plot_prediction(coordinates, data)
-    #plot the street data
+    # plot the street data
     plot_streets(coordinates)
-    #combine the osm and predicted data
+    # combine the osm and predicted data
     plot_combined(coordinates, data)
-    #add a background to the combined image
+    # add a background to the combined image
     add_background(coordinates)
     
-    #cache cleanup
+    # cache cleanup
     datanames = os.listdir(os.getcwd() + os.sep + "cache")
     for dataname in datanames:
         os.remove(os.getcwd() + os.sep + "cache" + os.sep + dataname)
 
+# route to get the labels present in a given predicted image
 @app.get('/unique/')
 def get_unique(lat, lng):
     coordinates = (lat, lng)
+    # define the valid rgb values of the labels (prevents issues with antialiasing)
     valid_rgb = ['255255255', '477979', '8510747', '1608245', '01000', 
                 '13900', '1281280', '7261139', '119136153', '188143143', 
                 '0139139', '00139', '5020550', '21816532', '143184143', 
@@ -481,9 +492,10 @@ def get_unique(lat, lng):
                 '25512780', '2550255', '240230140', '100149237', 
                 '221160221', '176224230', '144238144', '25520147', 
                 '123104238', '255218185']
-    
+    #open image and extract the unique values and finally return them
     image = Image.open(os.getcwd() + os.sep + "temp" + os.sep + str(coordinates[0]) + "_" + str(coordinates[1]) + "_Combined" + ".png")
     image_data = np.array(image)
+    # reshape to 
     image_data_reshape = image_data.reshape((-1, 3))
     unique = np.unique(image_data_reshape, axis=0)
     valid_unique = []

@@ -35,34 +35,47 @@
     </div>
     <div id="navandpred">
         <div id="pac-container">
+            <!-- input for the location input and autocomplete -->
             <input id="pac-input" type="text" placeholder="Enter a location" />
+            <!-- button that triggers the prediction and shows the loading animation when clicked -->
             <button class="btn" id="predict_button" onclick="getResult(getCenter()); disableInputs(); showLoading();">
                 Predict </button>
         </div>
     </div>
+    <!-- div containing the google maps element in the background -->
     <div id="googleMap"></div>
+    <!-- overlay containing the loading animation that is shown when the prediction is started -->
     <div id="loading-overlay">
         <img id="loading" src="svg/Earth-2.6s-200px.svg"> </img>
         <div id="loading_text"> Analysing landuse </div>
     </div>
     <script>
+        // script defining the google associated elements
         var map;
         var input = document.getElementById('pac-input');
         var autocomplete;
         var lat;
         var lng;
 
+        // if previous input is available, set the starting location of the index to it
         if (localStorage.getItem("lat") == null) { localStorage.setItem("lat", 49.788143251247014) }
         if (localStorage.getItem("lng") == null) { localStorage.setItem("lng", 9.935410200836861) }
 
         function init() {
+
+            // define the google map settings 
             var mapProp = {
                 center: new google.maps.LatLng(localStorage.getItem("lat"), localStorage.getItem("lng")), zoom: 16, mapTypeId: 'satellite', disableDefaultUI: true,
                 maxZoom: 16, minZoom: 16, scrollwheel: false, navigationControl: false, mapTypeControl: false, scaleControl: false, draggable: false
             };
+
+            //define google maps element
             map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+            // define google autocomplete element
             autocomplete = new google.maps.places.Autocomplete(input);
 
+            // when input is made, get coordinates and it to the new center point of the google map
             autocomplete.addListener("place_changed", () => {
                 const place = autocomplete.getPlace();
 
@@ -80,13 +93,18 @@
             });
 
         }
+
+        // simple function to get the center coordinates of the current selection
         function getCenter() {
             return map.getCenter();
         }
+
+        // function to disable all inputs (button and input field)
         function disableInputs() {
             setTimeout(function () { document.getElementById('predict_button').classList.remove("btn"); document.getElementById('predict_button').classList.add("disabled"); document.getElementById('pac-input').disabled = true; document.getElementById('pac-input').style.backgroundColor = '#ffffff63'; }, 500);
         }
 
+        // show the loading overlay by changig its display style from none to flex
         function showLoading() {
             // Display the loading overlay
             document.getElementById('loading-overlay').style.display = 'flex';
