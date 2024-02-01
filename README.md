@@ -1,6 +1,7 @@
 # DataScience2
 
 ## Quick Start (Windows):
+Download model file from https://drive.google.com/file/d/1KzhK78cQcRkj5Fay-PBw5Uw6Kw9KGhvO/view?usp=sharing and place it in `/Model/`
 
 To launch the program on a Windows operating system, simply run the `start_program.bat`. Ensure that Python 3 is installed. The program will automatically install all required dependencies and launch both the HTML and backend servers.
 
