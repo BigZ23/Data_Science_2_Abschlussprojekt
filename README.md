@@ -67,4 +67,4 @@ Open your preferred browser and go to http://127.0.0.1:8080/.
 - **`Capstone_Project_TOD2`**: Jupyter Notebook displaying the code in a presentable manner.
 
 - **`README.md`**: Readme file for the whole project.
-- **`start_programm.bat`**: Script for starting up the programm under Windows.
+- **`start_program.bat`**: Script for starting up the program under Windows.
