@@ -1,9 +1,0 @@
-https://osmlanduse.org/#13.079484433365609/-113.56475/37.06599/0/
-https://walkwithfastai.com/Segmentation
-https://towardsdatascience.com/image-segmentation-with-fastai-9f8883cc5b53
-https://wiki.openstreetmap.org/wiki/Key:landuse
-https://wiki.openstreetmap.org/wiki/Key%3Aplace
-https://www.arcgis.com/apps/View/index.html?appid=df7cee38677f479c8697026ebf920431
-https://github.com/satellite-image-deep-learning/techniques#3-instance-segmentation
-https://gis.stackexchange.com/questions/7430/what-ratio-scales-do-google-maps-zoom-levels-correspond-to
-https://stackoverflow.com/questions/12507274/how-to-get-bounds-of-a-google-static-map
