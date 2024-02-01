@@ -21,9 +21,12 @@ pip install -r Application/Backend/requirements.txt
 ### 3. Start the Backend Server:
 Navigate to `/Application/Backend/app/` and open the console. Run:
 ```bash
+uvicorn main:app
+```
+_or alternatively:_ 
+```bash
 python3 -m uvicorn main:app
 ```
-
 ### 4. Start the HTML Server:
 Navigate to `/Application/` and open the console. Run:
 ```bash
