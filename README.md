@@ -24,7 +24,7 @@ Führen Sie die Datei start_program.bat aus. Das Programm installiert automatisc
 ### Modell herunterladen
 
 Laden Sie die Modelldatei von Google Drive herunter und platzieren Sie sie im Verzeichnis /Model/.
-Abhängigkeiten installieren
+### Abhängigkeiten installieren
 
 Navigieren Sie in der Konsole zum Verzeichnis /Application/Backend/ und führen Sie folgenden Befehl aus:
 
