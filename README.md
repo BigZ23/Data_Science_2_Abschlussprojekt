@@ -1,31 +1,38 @@
-Geospace Machine Learning Model
+#### Geospace Machine Learning Model
 
-Dieses Projekt beinhaltet die Entwicklung eines Machine-Learning-Modells zur automatischen Klassifikation von Landnutzungstypen anhand von Satellitenbildern und OpenStreetMap-Daten. Das Modell verwendet einen U-Net-Ansatz und wurde mit Hilfe von FastAI und PyTorch implementiert.
-Schnellstart (Windows)
+Dieses Projekt beinhaltet die Entwicklung eines Machine-Learning-Modells zur automatischen Klassifikation von Landnutzungstypen anhand von Satellitenbildern und OpenStreetMap-Daten. Ziel ist es, die Visualisierung von Geodaten zu verbessern und zukünftige Stadtplanungsprozesse zu unterstützen. Das Modell verwendet einen U-Net-Ansatz und wurde mithilfe von FastAI und PyTorch implementiert.
+### Schnellstart (Windows)
+## Voraussetzungen
 
-    Modell herunterladen
+    Python 3.x installiert
+    Internetverbindung zum Herunterladen der Modelldatei
+    Optional: Virtuelle Umgebung für die Installation der Abhängigkeiten
 
-    Laden Sie die Modedatei von Google Drive herunter und platzieren Sie sie im Verzeichnis /Model/.
+## Modell herunterladen
 
-    Programm starten
+Laden Sie die Modelldatei von Google Drive herunter und platzieren Sie sie im Verzeichnis /Model/.
+## Programm starten
 
-    Führen Sie die Datei start_program.bat aus. Stellen Sie sicher, dass Python 3 installiert ist. Das Programm installiert automatisch alle erforderlichen Abhängigkeiten und startet sowohl den HTML- als auch den Backend-Server.
+Führen Sie die Datei start_program.bat aus. Das Programm installiert automatisch alle erforderlichen Abhängigkeiten und startet sowohl den HTML- als auch den Backend-Server.
+### Manuelle Installation (Windows/Linux)
+## Voraussetzungen
 
-Manuelle Installation (Windows/Linux)
+    Python 3.x installiert
+    Pip (Python-Paketmanager)
+    Optional: Virtuelle Umgebung für die Installation der Abhängigkeiten
 
-    Modell herunterladen
+## Modell herunterladen
 
-    Laden Sie die Modedatei von Google Drive herunter und platzieren Sie sie im Verzeichnis /Model/.
+Laden Sie die Modelldatei von Google Drive herunter und platzieren Sie sie im Verzeichnis /Model/.
+Abhängigkeiten installieren
 
-    Abhängigkeiten installieren
+Navigieren Sie in der Konsole zum Verzeichnis /Application/Backend/ und führen Sie folgenden Befehl aus:
 
-    Navigieren Sie in der Konsole zum Verzeichnis /Application/Backend/ und führen Sie folgenden Befehl aus:
-
-    bash
+bash
 
 pip install -r requirements.txt
 
-Backend-Server starten
+## Backend-Server starten
 
 Navigieren Sie zum Verzeichnis /Application/Backend/app/ und führen Sie aus:
 
@@ -37,37 +44,36 @@ oder alternativ:
 
 bash
 
-python3 -m uvicorn main:app
+python -m uvicorn main:app
 
-HTML-Server starten
+## HTML-Server starten
 
 Navigieren Sie zum Verzeichnis /Application/ und führen Sie aus:
 
 bash
 
-    python3 -m http.server -b 127.0.0.1 8080
+python -m http.server -b 127.0.0.1 8080
 
-    Webseite öffnen
+## Webseite öffnen
 
-    Öffnen Sie Ihren bevorzugten Browser und rufen Sie die Adresse http://127.0.0.1:8080/ auf.
-
-Projektstruktur
+Öffnen Sie Ihren bevorzugten Browser und rufen Sie die Adresse http://127.0.0.1:8080/ auf.
+## Projektstruktur
 
     Application/: Enthält Frontend und Backend der Anwendung.
         Backend/: Enthält den Backend-Server.
-            app/: Enthält die Dateien zum Ausführen des Backend-Servers.
-                temp/: Enthält temporäre Dateien wie OSM-Daten, Vorhersagen und kombinierte Bilder.
+            app/: Dateien zum Ausführen des Backend-Servers.
+                temp/: Temporäre Dateien wie OSM-Daten, Vorhersagen und kombinierte Bilder.
                 Backend_Test.ipynb: Jupyter Notebook zum Testen des Codes.
                 main.py: Hauptdatei zum Starten des Backends.
             requirements.txt: Liste der Python-Abhängigkeiten.
-        Frontend/: Enthält die Dateien für das Frontend.
-            css/: Enthält die CSS-Dateien.
-            js/: Enthält die JavaScript-Dateien.
-            svg/: Enthält SVG-Dateien für Grafiken.
+        Frontend/: Dateien für das Frontend.
+            css/: CSS-Dateien.
+            js/: JavaScript-Dateien.
+            svg/: SVG-Dateien für Grafiken.
             index.html: Startseite für die Vorhersage.
             result.html: Seite zur Anzeige der Vorhersageergebnisse.
-    Model/: Enthält alles zur Modellerstellung und Datengenerierung.
-        Data/: Enthält die Trainingsdaten.
+    Model/: Enthält Modellerstellung und Datengenerierung.
+        Data/: Trainingsdaten.
             Images/: Satellitenbilder.
             Masks/: Masken für das Training.
         Data_generation.ipynb: Code zur Datengenerierung.
