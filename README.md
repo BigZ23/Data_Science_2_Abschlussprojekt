@@ -1,73 +1,79 @@
-# DataScience2
+Geospace Machine Learning Model
 
-## Quick Start (Windows):
-Download model file from https://drive.google.com/file/d/1KzhK78cQcRkj5Fay-PBw5Uw6Kw9KGhvO/view?usp=sharing and place it in `/Model/`
+Dieses Projekt beinhaltet die Entwicklung eines Machine-Learning-Modells zur automatischen Klassifikation von Landnutzungstypen anhand von Satellitenbildern und OpenStreetMap-Daten. Das Modell verwendet einen U-Net-Ansatz und wurde mit Hilfe von FastAI und PyTorch implementiert.
+Schnellstart (Windows)
 
-To launch the program on a Windows operating system, simply run the `start_program.bat`. Ensure that Python 3 is installed. The program will automatically install all required dependencies and launch both the HTML and backend servers.
+    Modell herunterladen
 
-## Manual Setup (Windows/Linux):
+    Laden Sie die Modedatei von Google Drive herunter und platzieren Sie sie im Verzeichnis /Model/.
 
-### 1. Download Modelfile:
-Download model file from https://drive.google.com/file/d/1KzhK78cQcRkj5Fay-PBw5Uw6Kw9KGhvO/view?usp=sharing and place it in `/Model/`
+    Programm starten
 
-### 2. Install Requirements:
+    Führen Sie die Datei start_program.bat aus. Stellen Sie sicher, dass Python 3 installiert ist. Das Programm installiert automatisch alle erforderlichen Abhängigkeiten und startet sowohl den HTML- als auch den Backend-Server.
 
-Navigate to `/Application/Backend/` and open the console. Run the following command:
+Manuelle Installation (Windows/Linux)
 
-```bash
-pip install -r Application/Backend/requirements.txt
-```
+    Modell herunterladen
 
-### 3. Start the Backend Server:
-Navigate to `/Application/Backend/app/` and open the console. Run:
-```bash
+    Laden Sie die Modedatei von Google Drive herunter und platzieren Sie sie im Verzeichnis /Model/.
+
+    Abhängigkeiten installieren
+
+    Navigieren Sie in der Konsole zum Verzeichnis /Application/Backend/ und führen Sie folgenden Befehl aus:
+
+    bash
+
+pip install -r requirements.txt
+
+Backend-Server starten
+
+Navigieren Sie zum Verzeichnis /Application/Backend/app/ und führen Sie aus:
+
+bash
+
 uvicorn main:app
-```
-_or alternatively:_ 
-```bash
+
+oder alternativ:
+
+bash
+
 python3 -m uvicorn main:app
-```
-### 4. Start the HTML Server:
-Navigate to `/Application/` and open the console. Run:
-```bash
-python3 -m http.server -b 127.0.0.1 8080
-```
 
-### 5. Open the Locally Hosted Website:
-Open your preferred browser and go to http://127.0.0.1:8080/.
+HTML-Server starten
 
+Navigieren Sie zum Verzeichnis /Application/ und führen Sie aus:
 
-## File Descriptions:
+bash
 
-- **`Application/`**: Directory containing the front- and backend.
-   - **`Backend/`**: Directory containing the backend server.
-     - **`app/`**: Directory containing the files to run the backend server.
-       - **`temp/`**: Directory containing the osm, predicted and combined images.
-       - **`Backend_Test.ipynb`**: Jupyter Notebook to test code later used in the main.py.
-       - **`main.py`**: Main python file to run the backend.
-     - **`requirements.txt`**: Text file to automatically install all the required python libraries to run the files contained in this folder. 
-   - **`Frontend/`**: Directory containing the files to run the frontend.
-     - **`css/`**: Directory containing all css files used in the frontend.
-       - **`buttons.css`**: Css file containig the styling of the buttons used.
-       - **`globals.css`**: Css file containig the rest of the styling.
-     - **`js/`**: Directory containing all javascript files used in the frontend.
-       - **`prediction.js`**: Javascript file defining what happens if the user wants to start a prediction.
-     - **`svg/`**: Directory containing all svg files used in the frontend.
-       - **`Earth-2.6s-200px.svg`**: Svg displaying a rotating earth used as a loading animation in the frontend.
-     - **`index.html`**: HTML starting page where a prediction can be started.
-     - **`result.html`**: HTML page displaying the results when a prediction is made.
-   - **`index.html`**: Dummyfile to set the correct scope of the html server.
+    python3 -m http.server -b 127.0.0.1 8080
 
-- **`Model/`**: Directory containing everything to do with model training and data generation as well as the final model itself.
-  - **`Data/`**: Directory containing the data used to train the model.
-    - **`Images/`**: Directory containing all the images used to train the model.
-    - **`Masks/`**: Directory containing all the data masks used to train the model.
-  - **`Data_generation.ipynb`**: Jupyter Notebook containing the code to generate the dataset.
-  - **`Dataset_analysis.ipynb`**: Jupyter Notebook containing a short analysis of the dataset.
-  - **`Model.ipynb`**: Jupyter Notebook containing code to train and export the model.
-  - **`requirements.txt`**: Text file to automatically install all the required python libraries to run the files contained in this folder.
+    Webseite öffnen
 
-- **`Capstone_Project_TOD2`**: Jupyter Notebook displaying the code in a presentable manner.
+    Öffnen Sie Ihren bevorzugten Browser und rufen Sie die Adresse http://127.0.0.1:8080/ auf.
 
-- **`README.md`**: Readme file for the whole project.
-- **`start_program.bat`**: Script for starting up the program under Windows.
+Projektstruktur
+
+    Application/: Enthält Frontend und Backend der Anwendung.
+        Backend/: Enthält den Backend-Server.
+            app/: Enthält die Dateien zum Ausführen des Backend-Servers.
+                temp/: Enthält temporäre Dateien wie OSM-Daten, Vorhersagen und kombinierte Bilder.
+                Backend_Test.ipynb: Jupyter Notebook zum Testen des Codes.
+                main.py: Hauptdatei zum Starten des Backends.
+            requirements.txt: Liste der Python-Abhängigkeiten.
+        Frontend/: Enthält die Dateien für das Frontend.
+            css/: Enthält die CSS-Dateien.
+            js/: Enthält die JavaScript-Dateien.
+            svg/: Enthält SVG-Dateien für Grafiken.
+            index.html: Startseite für die Vorhersage.
+            result.html: Seite zur Anzeige der Vorhersageergebnisse.
+    Model/: Enthält alles zur Modellerstellung und Datengenerierung.
+        Data/: Enthält die Trainingsdaten.
+            Images/: Satellitenbilder.
+            Masks/: Masken für das Training.
+        Data_generation.ipynb: Code zur Datengenerierung.
+        Dataset_analysis.ipynb: Analyse des Datensatzes.
+        Model.ipynb: Code zum Training und Exportieren des Modells.
+        requirements.txt: Abhängigkeiten für das Modell.
+    Capstone_Project_TOD2.ipynb: Präsentation des Projekts in einem Jupyter Notebook.
+    start_program.bat: Skript zum Starten des Programms unter Windows.
+    README.md: Diese Datei.
