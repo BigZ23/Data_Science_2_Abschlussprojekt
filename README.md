@@ -1,27 +1,27 @@
-#### Geospace Machine Learning Model
+# Geospace Machine Learning Model
 
 Dieses Projekt beinhaltet die Entwicklung eines Machine-Learning-Modells zur automatischen Klassifikation von Landnutzungstypen anhand von Satellitenbildern und OpenStreetMap-Daten. Ziel ist es, die Visualisierung von Geodaten zu verbessern und zukünftige Stadtplanungsprozesse zu unterstützen. Das Modell verwendet einen U-Net-Ansatz und wurde mithilfe von FastAI und PyTorch implementiert.
-### Schnellstart (Windows)
-## Voraussetzungen
+## Schnellstart (Windows)
+### Voraussetzungen
 
     Python 3.x installiert
     Internetverbindung zum Herunterladen der Modelldatei
     Optional: Virtuelle Umgebung für die Installation der Abhängigkeiten
 
-## Modell herunterladen
+### Modell herunterladen
 
 Laden Sie die Modelldatei von Google Drive herunter und platzieren Sie sie im Verzeichnis /Model/.
-## Programm starten
+### Programm starten
 
 Führen Sie die Datei start_program.bat aus. Das Programm installiert automatisch alle erforderlichen Abhängigkeiten und startet sowohl den HTML- als auch den Backend-Server.
-### Manuelle Installation (Windows/Linux)
-## Voraussetzungen
+## Manuelle Installation (Windows/Linux)
+### Voraussetzungen
 
     Python 3.x installiert
     Pip (Python-Paketmanager)
     Optional: Virtuelle Umgebung für die Installation der Abhängigkeiten
 
-## Modell herunterladen
+### Modell herunterladen
 
 Laden Sie die Modelldatei von Google Drive herunter und platzieren Sie sie im Verzeichnis /Model/.
 Abhängigkeiten installieren
@@ -32,7 +32,7 @@ bash
 
 pip install -r requirements.txt
 
-## Backend-Server starten
+### Backend-Server starten
 
 Navigieren Sie zum Verzeichnis /Application/Backend/app/ und führen Sie aus:
 
@@ -46,7 +46,7 @@ bash
 
 python -m uvicorn main:app
 
-## HTML-Server starten
+### HTML-Server starten
 
 Navigieren Sie zum Verzeichnis /Application/ und führen Sie aus:
 
@@ -54,10 +54,10 @@ bash
 
 python -m http.server -b 127.0.0.1 8080
 
-## Webseite öffnen
+### Webseite öffnen
 
 Öffnen Sie Ihren bevorzugten Browser und rufen Sie die Adresse http://127.0.0.1:8080/ auf.
-## Projektstruktur
+### Projektstruktur
 
     Application/: Enthält Frontend und Backend der Anwendung.
         Backend/: Enthält den Backend-Server.
